@@ -1,68 +1,192 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# TODO REBAHAN'S APP
 
-## Available Scripts
+## Intro
 
-In the project directory, you can run:
+- [live demo](https://build.herkahahaha.now.sh/)
+- [Case Study](https://herkahahaha.com/reactjs-bekerja/)
 
-### `yarn start`
+## Persiapan
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<hr/>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```sh
+    npx create-react-app rebahan-app
+```
 
-### `yarn test`
+> !! optional
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    tambahkan cdn materialize.css atau bootstrap
+    di folder public atau di file root pada folder src atau membuat kustom style css
 
-### `yarn build`
+> Membuat Todo App ini perlu diingat langkah awal membuat data `state` yang dinamis, dan bisa sebagai prototype pengembangan aplikasi web yang lebih kompleks terintegrasi dengan backend.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Pembuatan dan Modifikasi
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+<hr/>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. App.js sebagai file root yang menampung fungsi-fungsi yang dibutuhkan.<br/>
 
-### `yarn eject`
+```Javascript
+    import React, { Component } from "react";
+    class App extends Component {
+  state = {
+    todos: [
+      { id: 1, content: "lanjut rebahan" },
+      { id: 2, content: "lanjut makan" }
+    ]
+  };
+  render() {
+    return (
+      <div className="todo-app container">
+        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
+      </div>
+    );
+  }
+}
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+export default App;
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. Todo.js sebagai komponen ui yang menampilkan isi `state`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```Javascript
+    import React from "react";
 
-## Learn More
+const Todos = ({ todos }) => {
+  const todoList = todos.length ? (
+    todos.map(todo => {
+      return (
+        <div className="collection-item" key={todo.id}>
+          <span>
+            {todo.content}
+          </span>
+        </div>
+      );
+    })
+  ) : (
+    <p className="center">REBAHAAAAANNNNNN .....</p>
+  );
+  return <div className="todos collection">{todoList}</div>;
+};
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+export default Todos;
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
 
-### Code Splitting
+3. Menambahkan dan menghubungkan fungsi hapus & tambah pada data props
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+`App.js`
 
-### Analyzing the Bundle Size
+```Javascript
+   ...
+    deleteTodo = id => {
+    const todos = this.state.todos.filter(todo => {
+      return todo.id !== id;
+    });
+    this.setState({
+      todos: todos //bisa ditulis satu jika key dan value sama
+    });
+  };
+  render() {
+    return (
+      <div className="todo-app container">
+        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
+      </div>
+    );
+  }
+  ...
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+`Todo.js` menambahkan onCLick method pada tag `<span>`
 
-### Making a Progressive Web App
+```Javascript
+   ...
+    const Todos = ({ todos, deleteTodo }) => {
+  const todoList = todos.length ? (
+    todos.map(todo => {
+      return (
+        <div className="collection-item" key={todo.id}>
+          <span
+            onClick={() => {
+              deleteTodo(todo.id);
+            }}
+          >
+            {todo.content}
+          </span>
+        </div>
+      );
+    })
+  ) : (
+    <p className="center">REBAHAAAAANNNNNN .....</p>
+  );
+  return <div className="todos collection">{todoList}</div>;
+};
+  ...
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+3. Menambahkan Form tambah data `AddForm.js`
 
-### Advanced Configuration
+```js
+import React, { Component } from "react";
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+class AddForm extends Component {
+  state = {
+    content: ""
+  };
+  handleChange = e => {
+    this.setState({
+      content: e.target.value
+    });
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.addForm(this.state);
+    this.setState({ content: "" });
+  };
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>Tambah List: </label>
+          <input
+            type="text"
+            onChange={this.handleChange}
+            value={this.state.content}
+          />
+        </form>
+      </div>
+    );
+  }
+}
+export default AddForm;
+```
 
-### Deployment
+Import file AddForm kedalam `App.js` dan buat fungsi nya sbb;
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```js
+    import AddForm from "./addForm";
+   ...
+    addForm = todo => {
+    todo.id = Math.random();
+    let todos = [...this.state.todos, todo];
+    this.setState({
+      todos
+    });
+  };
+  render() {
+    return (
+      <div className="todo-app container">
+        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
+        //tambahkan disini
+        <AddForm addForm={this.addForm} />
+      </div>
+    );
+  }
+  ...
+```
 
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+> Todo App sederhana berikut sangat membantu untuk memahami react js bekerja.

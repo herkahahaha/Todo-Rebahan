@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import AddForm from "./addForm";
+import Todos from "./Todos";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    todos: [
+      { id: 1, content: "lanjut rebahan" },
+      { id: 2, content: "lanjut makan" }
+    ]
+  };
+
+  deleteTodo = id => {
+    const todos = this.state.todos.filter(todo => {
+      return todo.id !== id;
+    });
+    this.setState({
+      todos: todos //bisa ditulis satu jika key dan value sama
+    });
+  };
+  addForm = todo => {
+    todo.id = Math.random();
+    let todos = [...this.state.todos, todo];
+    this.setState({
+      todos
+    });
+  };
+  render() {
+    return (
+      <div className="todo-app container">
+        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
+        <AddForm addForm={this.addForm} />
+      </div>
+    );
+  }
 }
 
 export default App;
