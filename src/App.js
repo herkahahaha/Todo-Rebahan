@@ -1,40 +1,26 @@
-import React, { Component } from "react";
+import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
-import AddForm from "./addForm";
-import Todos from "./Todos";
+import Navbar from "./components/Navbar";
+import Post from "./components/Post";
+import Home from "./components/pages/Home";
+import About from "./components/pages/About";
+import Contact from "./components/pages/Contact";
 
-class App extends Component {
-  state = {
-    todos: [
-      { id: 1, content: "lanjut rebahan" },
-      { id: 2, content: "lanjut makan" }
-    ]
-  };
-
-  deleteTodo = id => {
-    const todos = this.state.todos.filter(todo => {
-      return todo.id !== id;
-    });
-    this.setState({
-      todos: todos //bisa ditulis satu jika key dan value sama
-    });
-  };
-  addForm = todo => {
-    todo.id = Math.random();
-    let todos = [...this.state.todos, todo];
-    this.setState({
-      todos
-    });
-  };
-  render() {
-    return (
-      <div className="todo-app container">
-        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
-        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
-        <AddForm addForm={this.addForm} />
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/:post__id" component={Post} />
+        </Switch>
       </div>
-    );
-  }
+    </BrowserRouter>
+  );
 }
 
 export default App;
