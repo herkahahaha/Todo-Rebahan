@@ -1,192 +1,220 @@
-# TODO REBAHAN'S APP
+# todo REBAHAN'S ft Redux
 
 ## Intro
 
-- [live demo](https://build.herkahahaha.now.sh/)
-- [Case Study](https://herkahahaha.com/reactjs-bekerja/)
-
-## Persiapan
-
-<hr/>
-
-```sh
-    npx create-react-app rebahan-app
-```
-
-> !! optional
-
-    tambahkan cdn materialize.css atau bootstrap
-    di folder public atau di file root pada folder src atau membuat kustom style css
-
-> Membuat Todo App ini perlu diingat langkah awal membuat data `state` yang dinamis, dan bisa sebagai prototype pengembangan aplikasi web yang lebih kompleks terintegrasi dengan backend.
-
-## Pembuatan dan Modifikasi
-
-<hr/>
-
-1. App.js sebagai file root yang menampung fungsi-fungsi yang dibutuhkan.<br/>
-
-```Javascript
-    import React, { Component } from "react";
-    class App extends Component {
-  state = {
-    todos: [
-      { id: 1, content: "lanjut rebahan" },
-      { id: 2, content: "lanjut makan" }
-    ]
-  };
-  render() {
-    return (
-      <div className="todo-app container">
-        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
-        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
-      </div>
-    );
-  }
-}
-
-export default App;
+- [live demo next level](https://rebahans.herkahahaha.now.sh/)
 
 ```
-
-2. Todo.js sebagai komponen ui yang menampilkan isi `state`
-
-```Javascript
-    import React from "react";
-
-const Todos = ({ todos }) => {
-  const todoList = todos.length ? (
-    todos.map(todo => {
-      return (
-        <div className="collection-item" key={todo.id}>
-          <span>
-            {todo.content}
-          </span>
-        </div>
-      );
-    })
-  ) : (
-    <p className="center">REBAHAAAAANNNNNN .....</p>
-  );
-  return <div className="todos collection">{todoList}</div>;
-};
-
-export default Todos;
-
+Kamu mesti familiar dan mengetahui
+- Javascript ES6/7
+- React Basic
+- Redux Basix
 ```
 
-3. Menambahkan dan menghubungkan fungsi hapus & tambah pada data props
+> Membuat aplikasi sederhana dengan fitur component yang sedikit ditambah `Redux` sebagai file induk yang mendistribusikan data secara langsung tanpa harus memaksa `props` bekerja keras dan memusingkan developer, bisa dibilang ini framework bypass, namun tak semua developer menyukai ini, dan `redux` hanya opsional.
 
-`App.js`
+### Pengaturan Awal
 
-```Javascript
-   ...
-    deleteTodo = id => {
-    const todos = this.state.todos.filter(todo => {
-      return todo.id !== id;
-    });
-    this.setState({
-      todos: todos //bisa ditulis satu jika key dan value sama
-    });
-  };
-  render() {
-    return (
-      <div className="todo-app container">
-        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
-        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
-      </div>
-    );
-  }
-  ...
-```
+> **Kerangka Kerja**
 
-`Todo.js` menambahkan onCLick method pada tag `<span>`
+    .
+    ├── node_modules
+    ├── public
+    ├── src
+        ├── assets
+            ├── Asset-16.png
+        ├── components
+            ├── pages
+              ├── About.js
+              ├── Contact.js
+              ├── Home.js
+            ├── Navbar.js
+            ├── Post.js
+        ├── store
+            ├── action
+              ├── DeleteAction.js
+            ├── reducer
+              ├── RootReducer.js
+      ├── App.js
+      ├── App.test.js
+      ├── index.css
+      ├── index.js
+      ├── Logo.svg
+      ├── materialize.css
+      ├── serviceWorker.js
+    ├── .gitignore
+    ├── package-lock.json
+    ├── package.json
+    ├── README.md
+    └── yarn.log
 
-```Javascript
-   ...
-    const Todos = ({ todos, deleteTodo }) => {
-  const todoList = todos.length ? (
-    todos.map(todo => {
-      return (
-        <div className="collection-item" key={todo.id}>
-          <span
-            onClick={() => {
-              deleteTodo(todo.id);
-            }}
-          >
-            {todo.content}
-          </span>
-        </div>
-      );
-    })
-  ) : (
-    <p className="center">REBAHAAAAANNNNNN .....</p>
-  );
-  return <div className="todos collection">{todoList}</div>;
-};
-  ...
-```
+> **Setup Awal**
 
-3. Menambahkan Form tambah data `AddForm.js`
+1. Menjadikan `App.js` sebagai kontainer menampung semua data komponen dengan bantuan `react-router-dom` menjadikan masing halaman dinamis.
 
 ```js
-import React, { Component } from "react";
-
-class AddForm extends Component {
-  state = {
-    content: ""
-  };
-  handleChange = e => {
-    this.setState({
-      content: e.target.value
-    });
-  };
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.addForm(this.state);
-    this.setState({ content: "" });
-  };
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>Tambah List: </label>
-          <input
-            type="text"
-            onChange={this.handleChange}
-            value={this.state.content}
-          />
-        </form>
-      </div>
-    );
-  }
-}
-export default AddForm;
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Post from "./components/Post";
+import Home from "./components/pages/Home";
+import About from "./components/pages/About";
+import Contact from "./components/pages/Contact";
 ```
 
-Import file AddForm kedalam `App.js` dan buat fungsi nya sbb;
+- inisialisasi di dalam `return`, tag `Switch` ini yang berfungsi mendinamiskan setiap perpindahan halaman.
 
 ```js
-    import AddForm from "./addForm";
-   ...
-    addForm = todo => {
-    todo.id = Math.random();
-    let todos = [...this.state.todos, todo];
-    this.setState({
-      todos
-    });
-  };
-  render() {
-    return (
-      <div className="todo-app container">
-        <h1 className="center red-text">TODO REBAHAN'S APP</h1>
-        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
-        //tambahkan disini
-        <AddForm addForm={this.addForm} />
-      </div>
-    );
-  }
-  ...
+function App() {
+  return (
+    <BrowserRouter>
+      <React.Fragment>
+        <Navbar />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          {/* single page untuk detail post */}
+          <Route path="/:posts__id" component={Post} />
+        </Switch>
+      </React.Fragment>
+    </BrowserRouter>
+  );
+}
 ```
 
-> Todo App sederhana berikut sangat membantu untuk memahami react js bekerja.
+2. Membuat komponen `Navbar` dan menambahkan tag `Link` dari `react-router-dom`.
+
+```js
+<nav className="nav-wrapper blue darken-3">
+  <div className="container">
+    <Link to="/" className="brand-logo left">
+      Rebahan's
+    </Link>
+    <ul className="right">
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/about"> About </Link>
+      </li>
+      <li>
+        <Link to="/contact"> Contact </Link>
+      </li>
+    </ul>
+  </div>
+</nav>
+```
+
+3. bermain dengan `Redux` pada `index.js`, dengan mengimport beberapa package
+
+```js
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import RootReducer from "./store/reducer/RootReducer";
+const store = createStore(RootReducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
+```
+
+- `RootReducer.js` pada folder store/reducer
+
+```js
+const initialState = {
+  alfa: [],
+  posts: [
+    // isi data state
+    {},
+    {},
+    {}
+  ]
+};
+
+const RootReducer = (state = initialState, action) => {
+  console.log(action);
+  return state;
+};
+
+export default RootReducer;
+```
+
+- Menambahkan fungsi `mapStateToProps` dan HOC `connect()` dari package `react-redux` sebagai penghubung file ke `RootReducer`
+
+`Home.js`
+
+```js
+...
+const mapStateToProps = state => {
+  return { posts: state.posts };
+};
+
+// parsing agar data terambil dan bisa ditampilkan
+export default connect(
+  mapStateToProps,
+  null
+)(Home);
+
+```
+
+- Fungsi yang sama pada `Post.js` dan menambahkan `mapDispatchToProps` sebagai fungsi yang melakukan action event yang diinginkan, dalam kasus kali ini hanya fitur menghapus.
+
+```js
+const mapStateToProps = (state, ownProps) => {
+  let id = ownProps.match.params.posts__id;
+  console.log(id);
+  return {
+    post: state.posts.find(post => post.id === id)
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deletePost: id => {
+      dispatch(deletePost(id));
+      // dispatch({ type: "DELETE_POST", id });
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Post);
+```
+
+- inisialisai kedalam file komponen JSX pada `Post.js`
+
+```js
+const Post = props => {
+  // fungsi Hapus
+  let handleClick = () => {
+    props.deletePost(props.post.id);
+    props.history.push("/");
+  };
+  const postDetail = props.post ? (
+    <div className="post">
+      <h3 className="center">{props.post.title}</h3>
+      <p>{props.post.body}</p>
+      <div className="center">
+        {/* digunakan pada atribut button */}
+        <button onClick={() => handleClick()} className="btn grey">
+          Delete
+        </button>
+      </div>
+    </div>
+  ) : (
+    <div className="center">Loading data....</div>
+  );
+  return <div className="container">{postDetail}</div>;
+};
+```
+
+- import `{deletePost}` dari folder action, karena biasanya developer memisahkan fungsi hapus di folder `action` jika menggunakan `redux`.
+
+```js
+import { deletePost } from "../store/action/DeleteAction";
+```
