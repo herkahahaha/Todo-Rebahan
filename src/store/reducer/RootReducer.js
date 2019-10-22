@@ -3,22 +3,21 @@ const initialState = {
   posts: [
     {
       id: "1",
-      title:
-        "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      title: "Default: dispatch as a Prop",
       body:
-        "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"
+        "If you don't specify the second argument to connect(), your component will receive dispatch by default,Once you have connected your component in this way, your component receives props.dispatch. You may use it to dispatch actions to the store."
     },
     {
       id: "2",
-      title: "qui est esse",
+      title: "Providing A mapDispatchToProps Parameter",
       body:
-        "est rerum tempore vitae sequi sint nihil reprehenderit dolor beatae ea dolores neque fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis qui aperiam non debitis possimus qui neque nisi nulla"
+        "Providing a mapDispatchToProps allows you to specify which actions your component might need to dispatch. It lets you provide action dispatching functions as props. Therefore, instead of calling props.dispatch(() => increment()), you may call props.increment() directly. There are a few reasons why you might want to do that."
     },
     {
       id: "3",
-      title: "ea molestias quasi exercitationem repellat qui ipsa sit aut",
+      title: "Defining mapDispatchToProps As A Function",
       body:
-        "et iusto sed quo iure voluptatem occaecati omnis eligendi aut ad voluptatem doloribus vel accusantium quis pariatur molestiae porro eius odio et labore et velit aut"
+        "Defining mapDispatchToProps as a function gives you the most flexibility in customizing the functions your component receives, and how they dispatch actions. You gain access to dispatch and ownProps. You may use this chance to write customized functions to be called by your connected components."
     }
   ]
 };
