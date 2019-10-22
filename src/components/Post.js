@@ -2,16 +2,17 @@ import React from "react";
 import { deletePost } from "../store/action/DeleteAction";
 import { connect } from "react-redux";
 
-const Post = ({ post }) => {
+const Post = props => {
   let handleClick = () => {
-    console.log(deletePost(post.id));
+    props.deletePost(props.post.id);
+    props.history.push("/");
   };
-  const postDetail = post ? (
+  const postDetail = props.post ? (
     <div className="post">
-      <h3 className="center">{post.title}</h3>
-      <p>{post.body}</p>
+      <h3 className="center">{props.post.title}</h3>
+      <p>{props.post.body}</p>
       <div className="center">
-        <button onClick={handleClick} className="btn grey">
+        <button onClick={() => handleClick()} className="btn grey">
           Delete
         </button>
       </div>
@@ -23,6 +24,7 @@ const Post = ({ post }) => {
 };
 const mapStateToProps = (state, ownProps) => {
   let id = ownProps.match.params.posts__id;
+  console.log(id);
   return {
     post: state.posts.find(post => post.id === id)
   };
@@ -32,6 +34,7 @@ const mapDispatchToProps = dispatch => {
   return {
     deletePost: id => {
       dispatch(deletePost(id));
+      // dispatch({ type: "DELETE_POST", id });
     }
   };
 };
