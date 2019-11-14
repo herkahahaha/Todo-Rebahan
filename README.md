@@ -27,8 +27,8 @@
 1. App.js sebagai file root yang menampung fungsi-fungsi yang dibutuhkan.<br/>
 
 ```Javascript
-    import React, { Component } from "react";
-    class App extends Component {
+import React, { Component } from "react";
+class App extends Component {
   state = {
     todos: [
       { id: 1, content: "lanjut rebahan" },
@@ -104,7 +104,7 @@ export default Todos;
 
 ```Javascript
    ...
-    const Todos = ({ todos, deleteTodo }) => {
+const Todos = ({ todos, deleteTodo }) => {
   const todoList = todos.length ? (
     todos.map(todo => {
       return (
@@ -167,7 +167,7 @@ export default AddForm;
 Import file AddForm kedalam `App.js` dan buat fungsi nya sbb;
 
 ```js
-    import AddForm from "./addForm";
+import AddForm from "./addForm";
    ...
     addForm = todo => {
     todo.id = Math.random();
